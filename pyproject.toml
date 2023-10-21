@@ -25,6 +25,7 @@ dependencies = [
 tests = [
     "coverage[toml]",
     "pytest>=6.0",
+    "pytest-cov",
     "faker",
 ]
 docs = [

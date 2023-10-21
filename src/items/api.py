@@ -1,6 +1,17 @@
+"""
+API for the items project
+"""
 from dataclasses import asdict, dataclass, field
 
 from .db import DB
+
+__all__ = [
+    "Item",
+    "ItemsDB",
+    "ItemsException",
+    "MissingSummary",
+    "InvalidItemId",
+]
 
 
 @dataclass
@@ -22,7 +33,7 @@ class ItemsException(Exception):
     pass
 
 
-class InvalidItemId(ItemsException):
+class MissingSummary(ItemsException):
     pass
 
 
@@ -33,10 +44,10 @@ class InvalidItemId(ItemsException):
 class ItemsDB:
     def __init__(self, db_path):
         self._db_path = db_path
-        self._db = DB(db_path, ".items.db")
+        self._db = DB(db_path, ".items_db")
 
     def add_item(self, item: Item):
-        """Add an item, return the id of item."""
+        """Add an item, return the id of the item."""
         if not item.summary:
             raise MissingSummary
         if item.owner is None:
@@ -46,7 +57,7 @@ class ItemsDB:
         return item_id
 
     def get_item(self, item_id: int):
-        """Return the item with the associated ID."""
+        """Return an item with a corresponding id."""
         db_item = self._db.read(item_id)
         if db_item is not None:
             return Item.from_dict(db_item)
@@ -63,13 +74,9 @@ class ItemsDB:
                 if (t["owner"] == owner and t["state"] == state)
             ]
         elif owner is not None:
-            return [
-                Item.from_dict(t) for t in all_items if t["owner"] == owner
-            ]
+            return [Item.from_dict(t) for t in all_items if t["owner"] == owner]
         elif state is not None:
-            return [
-                Item.from_dict(t) for t in all_items if t["state"] == state
-            ]
+            return [Item.from_dict(t) for t in all_items if t["state"] == state]
         else:
             return [Item.from_dict(t) for t in all_items]
 
@@ -85,12 +92,19 @@ class ItemsDB:
             raise InvalidItemId(item_id) from exc
 
     def start(self, item_id: int):
-        """Set a item state to 'in prog'."""
+        """Set an item state to in progress."""
         self.update_item(item_id, Item(state="in progress"))
 
     def finish(self, item_id: int):
         """Set an item state to done."""
         self.update_item(item_id, Item(state="done"))
+
+    def delete_item(self, item_id: int):
+        """Remove an item from db with a given item id."""
+        try:
+            self._db.delete(item_id)
+        except KeyError as exc:
+            raise InvalidItemId(item_id) from exc
 
     def delete_all(self):
         """Remove all items from the db."""
