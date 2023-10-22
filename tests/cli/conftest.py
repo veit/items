@@ -1,9 +1,12 @@
-from typer.testing import CliRunner
-import items
-import pytest
 import shlex
 
+import pytest
+from typer.testing import CliRunner
+
+import items
+
 runner = CliRunner()
+
 
 @pytest.fixture()
 def items_cli_no_redirect():
@@ -12,7 +15,9 @@ def items_cli_no_redirect():
         result = runner.invoke(items.cli.app, command_list)
         output = result.stdout.rstrip()
         return output
+
     return run_cli
+
 
 @pytest.fixture()
 def items_cli(items_cli_no_redirect, db_path, monkeypatch, items_db):

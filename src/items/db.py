@@ -1,5 +1,5 @@
 """
-DB for the cards project
+DB for the items project
 """
 import tinydb
 
