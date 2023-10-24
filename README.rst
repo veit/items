@@ -10,6 +10,9 @@ Status
 .. image:: https://img.shields.io/github/license/veit/items.svg
    :alt: License
    :target: https://github.com/veit/items/blob/main/LICENSE
+.. image:: https://github.com/veit/items/workflows/CI/badge.svg
+   :target: https://github.com/veit/items/actions?workflow=CI
+   :alt: CI Status
 
 Installation
 ------------
