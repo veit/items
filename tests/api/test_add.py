@@ -6,7 +6,9 @@ Test Cases
 * `add` a duplicate item
 """
 import pytest
+
 from items import Item
+
 
 def test_add_from_empty(items_db):
     """
@@ -28,6 +30,7 @@ def test_add_from_nonempty(items_db):
     assert items_db.count() == 4
     assert items_db.get_item(i) == c
 
+
 def test_add_with_summary_and_owner(items_db):
     """
     count should be 1 and item retrievable
@@ -36,6 +39,7 @@ def test_add_with_summary_and_owner(items_db):
     i = items_db.add_item(c)
     assert items_db.count() == 1
     assert items_db.get_item(i) == c
+
 
 def test_add_duplicate(items_db):
     """

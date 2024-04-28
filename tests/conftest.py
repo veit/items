@@ -1,4 +1,5 @@
 import pytest
+
 import items
 from items import Item
 
@@ -22,11 +23,10 @@ def items_db(session_items_db, request, faker):
     db = session_items_db
     db.delete_all()
     # support for `@pytest.mark.num_items(<some number>)`
-    faker.seed_instance(101) # random seed
-    m = request.node.get_closest_marker('num_items')
+    faker.seed_instance(101)  # random seed
+    m = request.node.get_closest_marker("num_items")
     if m and len(m.args) > 0:
         num_items = m.args[0]
         for _ in range(num_items):
-            db.add_item(Item(summary=faker.sentence(),
-                             owner=faker.first_name()))
+            db.add_item(Item(summary=faker.sentence(), owner=faker.first_name()))
     return db

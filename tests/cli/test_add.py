@@ -1,5 +1,6 @@
 import items
 
+
 def test_add(items_db, items_cli):
     items_cli("add some task")
     expected = items.Item("some task", owner="", state="todo")
