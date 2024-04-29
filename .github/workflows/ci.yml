@@ -89,7 +89,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: html-report
-          path: htmlcov
+          path: coverage-data
         if: ${{ failure() }}
 
       - name: Create badge
