@@ -37,8 +37,14 @@ docs = [
 ]
 dev = [
     "items[tests, docs]",
-    "pre-commit"
+    "pre-commit",
+    "tox"
 ]
+
+[project.urls]
+Documentation = "https://items.cusy.io/"
+GitHub = "https://github.com/veit/items"
+Mastodon = "https://mastodon.social/@veit"
 
 [tool.hatch.version]
 path = "src/items/__init__.py"

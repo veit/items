@@ -1,8 +1,9 @@
-Quick start
-===========
+==========================
+items – a simple todo list
+==========================
 
 Status
-------
+======
 
 .. image:: https://img.shields.io/github/contributors/veit/items.svg
    :alt: Contributors
@@ -15,7 +16,7 @@ Status
    :alt: CI Status
 
 Installation
-------------
+============
 
 #. Download and unpack:
 
@@ -60,13 +61,15 @@ Installation
       C:> Scripts\python -m pip install --upgrade pip
       C:> Scripts\python -m pip install -e .
 
-Follow us
----------
+Project links
+=============
 
+* `Documentation <https://items.cusy.io>`_
 * `GitHub <https://github.com/veit/items>`_
+* `Mastodon <https://mastodon.social/@veit>`_
 
-Pull-Requests
--------------
+Collaboration
+=============
 
 If you have suggestions for improvements and additions, I recommend that you
 create a `Fork <https://github.com/veit/items/fork>`_ of my
