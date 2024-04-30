@@ -7,7 +7,7 @@ on:
   pull_request:
 
 env:
-  FORCE_COLOR: "1"
+  # FORCE_COLOR: "1"
   PIP_DISABLE_PIP_VERSION_CHECK: "1"
   PIP_NO_PYTHON_VERSION_WARNING: "1"
 
@@ -49,14 +49,54 @@ jobs:
     steps:
       - name: Check out the repo
         uses: actions/checkout@v4
+
       - name: Setup Python
         uses: actions/setup-python@v5
         with:
           cache: pip
           python-version: ${{ matrix.python-version }}
           allow-prereleases: true
+
       - name: Install tox
         run: python -m pip install tox
+
       - name: Run tests for ${{ matrix.python-version }}
         run: |
-          python -m tox
+          python -m tox run \
+            -e py$(echo ${{ matrix.python-version }} | tr -d .)-tests
+
+      - name: Upload coverage data
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage-data-${{ matrix.python-version }}
+          path: .coverage.*
+          if-no-files-found: ignore
+
+  coverage:
+    name: Ensure 99% test coverage
+    runs-on: ubuntu-latest
+    needs: tests
+    if: always()
+
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          cache: pip
+          python-version: 3.12
+
+      - name: Download coverage data
+        uses: actions/download-artifact@v4
+        with:
+          pattern: coverage-data-*
+          merge-multiple: true
+
+      - name: Combine coverage and fail if it’s <99%.
+        run: |
+          python -m pip install --upgrade coverage[toml]
+          python -m coverage combine
+          python -m coverage html --skip-covered --skip-empty
+          # Report and write to summary.
+          python -m coverage report --format=markdown >> $GITHUB_STEP_SUMMARY
+          # Report again and fail if under 99%.
+          python -m coverage report --fail-under=99
