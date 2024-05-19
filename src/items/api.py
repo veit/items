@@ -74,9 +74,13 @@ class ItemsDB:
                 if (t["owner"] == owner and t["state"] == state)
             ]
         elif owner is not None:
-            return [Item.from_dict(t) for t in all_items if t["owner"] == owner]
+            return [
+                Item.from_dict(t) for t in all_items if t["owner"] == owner
+            ]
         elif state is not None:
-            return [Item.from_dict(t) for t in all_items if t["state"] == state]
+            return [
+                Item.from_dict(t) for t in all_items if t["state"] == state
+            ]
         else:
             return [Item.from_dict(t) for t in all_items]
 

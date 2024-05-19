@@ -27,11 +27,17 @@ def test_update_summary(items_db):
     owner and state should stay the same
     summary should change
     """
-    i = items_db.add_item(Item("Update pytest section", owner="veit", state="done"))
-    items_db.update_item(i, Item(summary="Update cibuildwheel section", state=None))
+    i = items_db.add_item(
+        Item("Update pytest section", owner="veit", state="done")
+    )
+    items_db.update_item(
+        i, Item(summary="Update cibuildwheel section", state=None)
+    )
 
     mod = items_db.get_item(i)
-    assert mod == Item("Update cibuildwheel section", owner="veit", state="done")
+    assert mod == Item(
+        "Update cibuildwheel section", owner="veit", state="done"
+    )
 
 
 def test_update_both(items_db):
@@ -40,10 +46,14 @@ def test_update_both(items_db):
     owner and summary should change
     """
     i = items_db.add_item(Item("Update pytest section", owner="veit"))
-    items_db.update_item(i, Item(summary="Update cibuildwheel section", owner="vsc"))
+    items_db.update_item(
+        i, Item(summary="Update cibuildwheel section", owner="vsc")
+    )
 
     mod = items_db.get_item(i)
-    assert mod == Item("Update cibuildwheel section", owner="vsc", state="todo")
+    assert mod == Item(
+        "Update cibuildwheel section", owner="vsc", state="todo"
+    )
 
 
 def test_update_non_existent(items_db):

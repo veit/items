@@ -49,6 +49,9 @@ Mastodon = "https://mastodon.social/@veit"
 [tool.hatch.version]
 path = "src/items/__init__.py"
 
+[tool.black]
+line-length = 79
+
 [tool.pytest.ini_options]
 addopts = [
     "--strict-markers",

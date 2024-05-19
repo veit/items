@@ -28,5 +28,7 @@ def items_db(session_items_db, request, faker):
     if m and len(m.args) > 0:
         num_items = m.args[0]
         for _ in range(num_items):
-            db.add_item(Item(summary=faker.sentence(), owner=faker.first_name()))
+            db.add_item(
+                Item(summary=faker.sentence(), owner=faker.first_name())
+            )
     return db
