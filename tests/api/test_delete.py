@@ -1,9 +1,5 @@
-"""
-Test Cases:
-* `delete` one from a database with more than one
-* `delete` the last item
-* `delete` a non-existent item
-"""
+"""Testing the api delete function."""
+
 import pytest
 
 from items import InvalidItemId, Item
@@ -11,6 +7,7 @@ from items import InvalidItemId, Item
 
 @pytest.fixture()
 def three_items(items_db):
+    """Create three items."""
     item1 = items_db.add_item(Item("Update pytest section"))
     item2 = items_db.add_item(Item("Update cibuildwheel section"))
     item3 = items_db.add_item(Item("Update mock tests"))
@@ -18,10 +15,10 @@ def three_items(items_db):
 
 
 def test_delete_from_many(items_db, three_items):
-    """
-    Count should go from 3 to 2
-    And item shouldn't be retrievable.
-    But the rest should be.
+    """Testing the deletion of one item among several.
+
+    After item2 is deleted, the number should have been reduced from three to
+    two. In addition, item1 and item3 should still be present.
     """
     (item1, item2, item3) = three_items
     id_to_delete = item2
@@ -40,9 +37,10 @@ def test_delete_from_many(items_db, three_items):
 
 
 def test_delete_last_item(items_db):
-    """
-    Count should be back to 0
-    And item shouldn't be retrievable.
+    """Test the deletion of the last added item to an empty database.
+
+    The number of items should then be 0. In addition, get_item should throw
+    an InvalidItemId exception.
     """
     i = items_db.add_item(Item("Update pytest section"))
     items_db.delete_item(i)
@@ -52,9 +50,7 @@ def test_delete_last_item(items_db):
 
 
 def test_delete_non_existent(items_db):
-    """
-    Shouldn’t be able to start a non-existent item.
-    """
+    """Deleting a non-existent item should throw the InvalidItemId exception."""
     i = 42  # any number will do, db is empty
     with pytest.raises(InvalidItemId):
         items_db.delete_item(i)

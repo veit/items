@@ -5,6 +5,7 @@ Test Cases
 * `update` owner and summary of a item at the same time
 * `update` a non-existent item
 """
+
 import pytest
 
 from items import InvalidItemId, Item

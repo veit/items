@@ -1,3 +1,5 @@
+"""The configuration file for all tests."""
+
 import pytest
 
 import items
@@ -6,13 +8,13 @@ from items import Item
 
 @pytest.fixture(scope="session")
 def db_path(tmp_path_factory):
-    """Path to temporary database"""
+    """Path to a temporary database."""
     return tmp_path_factory.mktemp("items_db")
 
 
 @pytest.fixture(scope="session")
 def session_items_db(db_path):
-    """ItemsDB"""
+    """Establish and close the connection to the database."""
     db_ = items.ItemsDB(db_path)
     yield db_
     db_.close()
@@ -20,6 +22,7 @@ def session_items_db(db_path):
 
 @pytest.fixture(scope="function")
 def items_db(session_items_db, request, faker):
+    """Returns the database object."""
     db = session_items_db
     db.delete_all()
     # support for `@pytest.mark.num_items(<some number>)`
