@@ -1,21 +1,19 @@
-"""
-Test Cases
-* list from an empty database
-* list from a non-empty database
-"""
+"""Testing the api list command."""
 import pytest
 
 from items import Item
 
 
 def test_list_no_items(items_db):
-    """Empty db, empty list"""
+    """list_items of an empty database should return an empty list."""
     assert items_db.list_items() == []
 
 
 def test_list_several_items(items_db):
-    """ "
-    Given a variety of items, make sure they get returned.
+    """Given a list of items, this should be returned.
+
+    Given a list of items, the correct number should be returned. In addition,
+    each of the items should be in the list.
     """
     orig = [
         Item("Update pytest section"),
@@ -33,15 +31,12 @@ def test_list_several_items(items_db):
         assert c in the_list
 
 
-# list filter
-# - no owner
-# - specific owner
-# - specific state
-# - owner and state
-
-
 @pytest.fixture()
 def known_set():
+    """Create a list of items.
+
+    Some have no owner, others have defined owners and/or states.
+    """
     return [
         Item(summary="zero", owner="veit", state="todo"),
         Item(summary="one", owner="veit", state="in progress"),
@@ -57,6 +52,7 @@ def known_set():
 
 @pytest.fixture()
 def db_filled(items_db, known_set):
+    """Filling the database."""
     for c in known_set:
         items_db.add_item(c)
     return items_db
@@ -76,6 +72,9 @@ def db_filled(items_db, known_set):
     ids=str,
 )
 def test_list_filter(db_filled, known_set, owner_, state_, expected_indices):
+    """Check the number of items and whether the correct items have been
+    filtered out of the database.
+    """
     result = db_filled.list_items(owner=owner_, state=state_)
     assert len(result) == len(expected_indices)
     for i in expected_indices:

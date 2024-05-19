@@ -16,13 +16,22 @@ app = typer.Typer(add_completion=False)
 
 @app.command()
 def version():
-    """Return the version of the items application."""
+    """Returns the version of the items application.
+
+    Returns:
+        str: The version of the items package.
+    """
     print(items.__version__)
 
 
 @app.command()
 def add(summary: List[str], owner: str = typer.Option(None, "-o", "--owner")):
-    """Add an item to the db."""
+    """Adds an item to the db.
+
+    Args:
+        summary (list[str]): The summary of the new item.
+        owner (str): The owner of the new item.
+    """
     summary = " ".join(summary) if summary else None
     with items_db() as db:
         db.add_item(items.Item(summary, owner, state="todo"))
@@ -30,7 +39,13 @@ def add(summary: List[str], owner: str = typer.Option(None, "-o", "--owner")):
 
 @app.command()
 def delete(item_id: int):
-    """Remove an item in the db with a given id."""
+    """Removes an item in the db with a given id.
+
+    Args:
+        item_id (int): The item id of an item.
+    Raises:
+        InvalidItemId: if the item id is invalid.
+    """
     with items_db() as db:
         try:
             db.delete_item(item_id)
@@ -43,9 +58,7 @@ def list_items(
     owner: str = typer.Option(None, "-o", "--owner"),
     state: str = typer.Option(None, "-s", "--state"),
 ):
-    """
-    List the items in the db.
-    """
+    """List all items in the db."""
     with items_db() as db:
         the_items = db.list_items(owner=owner, state=state)
         table = Table(box=rich.box.SIMPLE)
@@ -67,7 +80,16 @@ def update(
     owner: str = typer.Option(None, "-o", "--owner"),
     summary: List[str] = typer.Option(None, "-s", "--summary"),
 ):
-    """Modify an item in the db with a given id with new info."""
+    """Modifies an item in the db with a given id with new info.
+
+    Args:
+        item_id (int): The item id of an item.
+        owner (str): The owner of the new item.
+        summary (list[str]): The summary of the new item.
+
+    Raises:
+        InvalidItemId: if the item id is invalid.
+    """
     summary = " ".join(summary) if summary else None
     with items_db() as db:
         try:
@@ -78,7 +100,14 @@ def update(
 
 @app.command()
 def start(item_id: int):
-    """Set an item state to in progress."""
+    """Set an item state to in progress.
+
+    Args:
+        item_id (int): The item id of an item.
+
+    Raises:
+        InvalidItemId: if the item id is invalid.
+    """
     with items_db() as db:
         try:
             db.start(item_id)
@@ -88,7 +117,14 @@ def start(item_id: int):
 
 @app.command()
 def finish(item_id: int):
-    """Set an item state to done."""
+    """Set an item state to done.
+
+    Args:
+        item_id (int): The item id of an item.
+
+    Raises:
+        InvalidItemId: if the item id is invalid.
+    """
     with items_db() as db:
         try:
             db.finish(item_id)
@@ -98,28 +134,40 @@ def finish(item_id: int):
 
 @app.command()
 def config():
-    """List the path to the Items db."""
+    """Returns the path to the Items db.
+
+    Returns:
+        str: The path to the Items db.
+    """
     with items_db() as db:
         print(db.path())
 
 
 @app.command()
 def count():
-    """Return number of items in db."""
+    """Returns number of items in db.
+
+    Returns:
+        str: The number of the items in the Items db.
+    """
     with items_db() as db:
         print(db.count())
 
 
 @app.callback(invoke_without_command=True)
 def main(ctx: typer.Context):
-    """
-    Items is a small command line task tracking application.
-    """
+    """Items is a small command line task tracking application."""
     if ctx.invoked_subcommand is None:
         list_items(owner=None, state=None)
 
 
 def get_path():
+    """Determines the path to the database.
+
+    Returns:
+        str: Determines the path to the database from the environment variable
+        ITEMS_DB_DIR. If it is not defined, $HOME/items_db is used.
+    """
     db_path_env = os.getenv("ITEMS_DB_DIR", "")
     if db_path_env:
         db_path = pathlib.Path(db_path_env)
@@ -130,6 +178,7 @@ def get_path():
 
 @contextmanager
 def items_db():
+    """Opens and closes the database connection."""
     db_path = get_path()
     db = items.ItemsDB(db_path)
     yield db

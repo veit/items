@@ -32,8 +32,11 @@ tests = [
 docs = [
     "furo",
     "sphinxext-opengraph",
+    "matplotlib",
     "sphinx-copybutton",
-    "sphinx_inline_tabs"
+    "sphinx_inline_tabs",
+    "sphinxcontrib.napoleon",
+    "interrogate"
 ]
 dev = [
     "items[tests, docs]",
@@ -81,6 +84,23 @@ exclude_lines = [
   "no cov",
   "if __name__ == .__main__.:",
 ]
+
+[tool.interrogate]
+ignore-init-method = true
+ignore-init-module = false
+ignore-magic = false
+ignore-semiprivate = false
+ignore-private = false
+ignore-module = false
+ignore-property-decorators = false
+fail-under = 100
+exclude = ["docs"]
+verbose = 0
+omit-covered-files = false
+quiet = false
+whitelist-regex = []
+ignore-regex = []
+color = true
 
 [project.scripts]
 items = "items:app"

@@ -1,10 +1,11 @@
-# Configuration file for the Sphinx documentation builder.
-#
-# For the full list of built-in configuration values, see the documentation:
-# https://www.sphinx-doc.org/en/master/usage/configuration.html
+"""Configuration file for the Sphinx documentation builder.
 
-# -- Project information -----------------------------------------------------
-# https://www.sphinx-doc.org/en/master/usage/configuration.html#project-information
+For the full list of built-in configuration values, see the documentation:
+https://www.sphinx-doc.org/en/master/usage/configuration.html
+
+-- Project information -----------------------------------------------------
+https://www.sphinx-doc.org/en/master/usage/configuration.html#project-information
+"""
 
 import os
 import re
@@ -21,6 +22,7 @@ release = re.sub("^v", "", os.popen("git describe --abbrev=0").read().strip())
 
 extensions = [
     "sphinx.ext.autodoc",
+    "sphinx.ext.napoleon",
     "sphinx_copybutton",
     "sphinx.ext.doctest",
     "sphinx.ext.intersphinx",

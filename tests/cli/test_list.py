@@ -1,3 +1,4 @@
+"""Test the cli list function."""
 import items
 
 expected_output = """\
@@ -10,6 +11,8 @@ expected_output = """\
 
 
 def test_list(items_db, items_cli):
+    """Two items are added and then ``list`` should correspond to
+    ``expected_output`` variable."""
     items_db.add_item(items.Item("Update pytest section"))
     items_db.add_item(items.Item("Update cibuildwheel section"))
     output = items_cli("list")
@@ -17,6 +20,8 @@ def test_list(items_db, items_cli):
 
 
 def test_main(items_db, items_cli):
+    """Even if items is called without options on the command line, the
+    corresponding table should be returned."""
     items_db.add_item(items.Item("Update pytest section"))
     items_db.add_item(items.Item("Update cibuildwheel section"))
     output = items_cli("")
