@@ -39,6 +39,11 @@ repos:
   - repo: https://github.com/econchick/interrogate
     rev: 1.7.0
     hooks:
-      - id: interrogate
-        args: [--quiet, --fail-under=100]
-        pass_filenames: false
+    - id: interrogate
+      args: [--quiet, --fail-under=100]
+      pass_filenames: false
+  - repo: https://github.com/fsfe/reuse-tool
+    rev: v3.0.2
+    hooks:
+    - id: reuse
+      args: ["lint"]

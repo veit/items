@@ -1,3 +1,7 @@
+# SPDX-FileCopyrightText: 2023 Veit Schiele
+#
+# SPDX-License-Identifier: BSD-3-Clause
+
 """Test the cli function for invalid ids."""
 
 import pytest

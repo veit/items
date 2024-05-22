@@ -1,3 +1,7 @@
+# SPDX-FileCopyrightText: 2023 Veit Schiele
+#
+# SPDX-License-Identifier: BSD-3-Clause
+
 """Command Line Interface (CLI) for the items project."""
 
 import os

@@ -1,3 +1,7 @@
+# SPDX-FileCopyrightText: 2023 Veit Schiele
+#
+# SPDX-License-Identifier: BSD-3-Clause
+
 [build-system]
 requires = ["hatchling"]
 build-backend = "hatchling.build"
@@ -41,6 +45,7 @@ docs = [
 dev = [
     "items[tests, docs]",
     "pre-commit",
+    "reuse",
     "tox"
 ]
 
