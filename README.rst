@@ -53,7 +53,7 @@ Installation
 
       $ cd items
       $ python3 -m venv .
-      $ source bin/activate
+      $ . bin/activate
       $ python -m pip install --upgrade pip
       $ python -m pip install -e .
 
@@ -61,9 +61,46 @@ Installation
 
    .. code-block:: ps1con
 
-      C:> python -m venv .
-      C:> Scripts\python -m pip install --upgrade pip
-      C:> Scripts\python -m pip install -e .
+      C:> py -m venv .
+      C:> Scripts\activate
+      C:> python -m pip install --upgrade pip
+      C:> python -m pip install -e .
+
+#. Run
+
+   … on Linux/macOS:
+
+   .. code-block:: console
+
+      $ . bin/activate
+      $ items
+
+        ID   state         owner   summary
+       ────────────────────────────────────────────────────────
+        1    done          veit    Update pytest section
+        2    in progress   veit    Update cibuildwheel section
+        3    todo          veit    Update mock tests
+
+
+      $ items version
+      0.1.0
+
+   … on Windows
+
+   .. code-block:: console
+
+      C:> Scripts\activate
+      C:> items
+
+        ID   state         owner   summary
+       ────────────────────────────────────────────────────────
+        1    done          veit    Update pytest section
+        2    in progress   veit    Update cibuildwheel section
+        3    todo          veit    Update mock tests
+
+
+      C:> items version
+      0.1.0
 
 Project links
 =============
