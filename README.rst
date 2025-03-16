@@ -6,6 +6,9 @@
 items – a simple todo list
 ==========================
 
+*items* is a simple command line tool for managing tasks. It allows you to
+create, display, update and delete tasks, as well as change their status.
+
 Status
 ======
 
@@ -18,6 +21,16 @@ Status
 .. image:: https://github.com/veit/items/workflows/CI/badge.svg
    :target: https://github.com/veit/items/actions?workflow=CI
    :alt: CI Status
+
+Features
+========
+
+* Create tasks with summary and owner
+* Display tasks, optionally filtered by owner or status
+* Update tasks and their status (todo, in progress, done)
+* Delete individual or all tasks
+* Simple command line interface
+* Programmable Python API
 
 Installation
 ============
@@ -66,48 +79,103 @@ Installation
       C:> python -m pip install --upgrade pip
       C:> python -m pip install -e .
 
-#. Run
+Usage
+=====
 
-   … on Linux/macOS:
+Command line instructions
+-------------------------
 
-   .. code-block:: console
+After activating the virtual Python environment, you can use items on the
+command line:
 
-      $ . bin/activate
-      $ items
+.. code-block:: console
 
-        ID   state         owner   summary
-       ────────────────────────────────────────────────────────
-        1    done          veit    Update pytest section
-        2    in progress   veit    Update cibuildwheel section
-        3    todo          veit    Update mock tests
+   # Display all tasks (default if no command is specified)
+   $ items
 
+   # Add a new task
+   $ items add "My task description" --owner "Veit"
 
-      $ items version
-      0.1.0
+   # Show filtered list
+   $ items list --owner "Veit" --state "todo"
 
-   … on Windows
+   # Update task
+   $ items update 1 --owner "Veit" --summary "Update description"
 
-   .. code-block:: console
+   # Change the status of a task
+   $ items start 1    # Set status to "in progress"
+   $ items finish 1   # Set status to "done"
 
-      C:> Scripts\activate
-      C:> items
+   # Delete task
+   $ items delete 1
 
-        ID   state         owner   summary
-       ────────────────────────────────────────────────────────
-        1    done          veit    Update pytest section
-        2    in progress   veit    Update cibuildwheel section
-        3    todo          veit    Update mock tests
+   # Display number of tasks
+   $ items count
 
+   # Display the file path of the database
+   $ items config
 
-      C:> items version
-      0.1.0
+   # Display version
+   $ items version
+
+Python API
+----------
+
+You can also use the items functionality directly in your Python code:
+
+.. code-block:: python
+
+   # Initialise database
+   from items import ItemsDB, Item
+
+   # Connect to database
+   db = ItemsDB("/path/to/database")
+
+   # Add new task
+   item = Item(summary="Implement feature", owner="Veit")
+   item_id = db.add_item(item)
+
+   # Retrieve task by ID
+   item = db.get_item(item_id)
+
+   # Update task
+   db.update_item(item_id, Item(summary="Implement feature with tests"))
+
+   # Change status
+   db.start(item_id)  # Set to "in progress"
+   db.finish(item_id)  # Set to "done"
+
+   #  List tasks (optionally with filtering)
+   all_items = db.list_items()
+   veit_tasks = db.list_items(owner="Veit")
+   in_process = db.list_items(state="in progress")
+
+   #  Delete task
+   db.delete_item(item_id)
+
+   # Close connection
+   db.close()
+
+Configuration
+=============
+
+The database file is saved under ``~/items_db`` by default. You can change this
+path by setting the environment variable ``ITEMS_DB_DIR``:
+
+.. code-block:: console
+
+   # Linux/macOS
+   $ export ITEMS_DB_DIR=/pfad/zu/meiner/datenbank
+
+   # Windows
+   C:> set ITEMS_DB_DIR=C:\pfad\zu\meiner\datenbank
 
 Project links
 =============
 
 * `Documentation <https://items.cusy.io>`_
 * `GitHub <https://github.com/veit/items>`_
-* `Mastodon <https://mastodon.social/@veit>`_
+* `Mastodon <https://mastodon.social/deck/@Python4DataScience>`_
 
 Collaboration
 =============
@@ -118,3 +186,9 @@ create a `Fork <https://github.com/veit/items/fork>`_ of my
 your changes there. You are also welcome to make a *pull request*. If the
 changes contained therein are small and atomic, I’ll be happy to look at your
 suggestions.
+
+License
+=======
+
+This project is licensed under the BSD-3-Clause licence. Further information can
+be found in the ``LICENSE`` file in the project repository.

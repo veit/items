@@ -2,7 +2,25 @@
 #
 # SPDX-License-Identifier: BSD-3-Clause
 
-"""Command Line Interface (CLI) for the items project."""
+"""This module provides a command-line interface for managing items.
+You can run the commands using the ``items`` command followed by
+the specific subcommand:
+
+.. code-block:: console
+
+    items add "My task description" --owner "Veit"
+    items list
+    items list --owner "Veit" --state "todo"
+    items update 1 --owner "Veit" --summary "Update description"
+    items start 1
+    items finish 1
+    items delete 1
+    items count
+    items config
+    items version
+
+If no subcommand is specified, the ``list`` command is executed by default.
+"""
 
 import os
 import pathlib
@@ -24,18 +42,18 @@ def version():
     """Returns the version of the items application.
 
     Returns:
-        str: The version of the items package.
+        str: The version string of the items package.
     """
     print(items.__version__)
 
 
 @app.command()
 def add(summary: List[str], owner: str = typer.Option(None, "-o", "--owner")):
-    """Adds an item to the db.
+    """Adds an item to the database.
 
     Args:
-        summary (list[str]): The summary of the new item.
-        owner (str): The owner of the new item.
+        summary (List[str]): The summary of the new item.
+        owner (str, optional): The owner of the new item. Defaults to None.
     """
     summary = " ".join(summary) if summary else None
     with items_db() as db:
@@ -44,12 +62,13 @@ def add(summary: List[str], owner: str = typer.Option(None, "-o", "--owner")):
 
 @app.command()
 def delete(item_id: int):
-    """Removes an item in the db with a given id.
+    """Removes an item from the database.
 
     Args:
-        item_id (int): The item id of an item.
+        item_id (int): The ID of the item to delete.
+
     Raises:
-        InvalidItemId: if the item id is invalid.
+        InvalidItemId: If no item with the given ID exists.
     """
     with items_db() as db:
         try:
@@ -63,7 +82,12 @@ def list_items(
     owner: str = typer.Option(None, "-o", "--owner"),
     state: str = typer.Option(None, "-s", "--state"),
 ):
-    """List all items in the db."""
+    """Lists items in the database, optionally filtered by owner and/or state.
+
+    Args:
+        owner (str, optional): Filter items by this owner. Defaults to None.
+        state (str, optional): Filter items by this state. Defaults to None.
+    """
     with items_db() as db:
         the_items = db.list_items(owner=owner, state=state)
         table = Table(box=rich.box.SIMPLE)
@@ -85,15 +109,15 @@ def update(
     owner: str = typer.Option(None, "-o", "--owner"),
     summary: List[str] = typer.Option(None, "-s", "--summary"),
 ):
-    """Modifies an item in the db with a given id with new info.
+    """Updates an item in the database.
 
     Args:
-        item_id (int): The item id of an item.
-        owner (str): The owner of the new item.
-        summary (list[str]): The summary of the new item.
+        item_id (int): The ID of the item to update.
+        owner (str, optional): The new owner of the item. Defaults to None.
+        summary (List[str], optional): The new summary of the item. Defaults to None.
 
     Raises:
-        InvalidItemId: if the item id is invalid.
+        InvalidItemId: If no item with the given ID exists.
     """
     summary = " ".join(summary) if summary else None
     with items_db() as db:
@@ -105,13 +129,13 @@ def update(
 
 @app.command()
 def start(item_id: int):
-    """Set an item state to in progress.
+    """Sets an item's state to 'in progress'.
 
     Args:
-        item_id (int): The item id of an item.
+        item_id (int): The ID of the item to update.
 
     Raises:
-        InvalidItemId: if the item id is invalid.
+        InvalidItemId: If no item with the given ID exists.
     """
     with items_db() as db:
         try:
@@ -122,13 +146,13 @@ def start(item_id: int):
 
 @app.command()
 def finish(item_id: int):
-    """Set an item state to done.
+    """Sets an item's state to 'done'.
 
     Args:
-        item_id (int): The item id of an item.
+        item_id (int): The ID of the item to update.
 
     Raises:
-        InvalidItemId: if the item id is invalid.
+        InvalidItemId: If no item with the given ID exists.
     """
     with items_db() as db:
         try:
@@ -139,10 +163,10 @@ def finish(item_id: int):
 
 @app.command()
 def config():
-    """Returns the path to the Items db.
+    """Returns the path to the Items database.
 
     Returns:
-        str: The path to the Items db.
+        str: Path to the Items database.
     """
     with items_db() as db:
         print(db.path())
@@ -150,10 +174,10 @@ def config():
 
 @app.command()
 def count():
-    """Returns number of items in db.
+    """Returns the number of items in the database.
 
     Returns:
-        str: The number of the items in the Items db.
+        int: Number of items in the database.
     """
     with items_db() as db:
         print(db.count())
@@ -169,9 +193,11 @@ def main(ctx: typer.Context):
 def get_path():
     """Determines the path to the database.
 
+    The path is determined from the environment variable ITEMS_DB_DIR.
+    If it is not defined, $HOME/items_db is used.
+
     Returns:
-        str: Determines the path to the database from the environment variable
-        ITEMS_DB_DIR. If it is not defined, $HOME/items_db is used.
+        pathlib.Path: Path to the database directory.
     """
     db_path_env = os.getenv("ITEMS_DB_DIR", "")
     if db_path_env:
@@ -183,7 +209,11 @@ def get_path():
 
 @contextmanager
 def items_db():
-    """Opens and closes the database connection."""
+    """Opens and closes the database connection.
+
+    Yields:
+        ItemsDB: An ItemsDB instance connected to the database.
+    """
     db_path = get_path()
     db = items.ItemsDB(db_path)
     yield db

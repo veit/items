@@ -2,8 +2,10 @@
 #
 # SPDX-License-Identifier: BSD-3-Clause
 
-"""
-The API for the items project
+"""The API for the items project.
+
+This module provides classes and functions to interact with the items database
+programmatically.
 """
 
 from dataclasses import asdict, dataclass, field
@@ -23,10 +25,11 @@ __all__ = [
 class Item:
     """Defines the items type with the attributes summary, owner and state.
 
-    Attributes:
+    Args:
         summary (str): Summary of an item. Defaults to None.
         owner (str): The person working on an item. Defaults to None.
-        state (str): The status of a task. Defaults to *todo*.
+        state (str): The status of a task. Defaults to 'todo'.
+        id (int): The unique identifier for the item. Defaults to None.
     """
 
     summary: str = None
@@ -36,37 +39,59 @@ class Item:
 
     @classmethod
     def from_dict(cls, d):
-        """Returns an item instance from a dict."""
+        """Returns an item instance from a dict.
+
+        Args:
+            d (dict): Dictionary containing item attributes.
+
+        Returns:
+            Item: Item instance created from dictionary values.
+        """
         return Item(**d)
 
     def to_dict(self):
-        """Returns a dict from an item instance."""
+        """Returns a dict from an item instance.
+
+        Returns:
+            dict: Dictionary containing the item's attributes.
+        """
         return asdict(self)
 
 
 class ItemsException(Exception):
-    """Exception class used by the :class:`MissingSummary` and
-    :class:`InvalidItemId` exceptions.
+    """Base exception class for the items module.
+
+    Parent class for MissingSummary and InvalidItemId exceptions.
     """
 
     pass
 
 
 class MissingSummary(ItemsException):
-    """Exception if an item does not have a summary when calling
-    :func:`items.api.ItemsDB.add_item`."""
+    """Exception raised when an item is added without a summary.
+
+    Raised when items.api.ItemsDB.add_item is called with an item
+    that has no summary.
+    """
 
     pass
 
 
 class InvalidItemId(ItemsException):
-    """Exception if an item has no summary."""
+    """Exception raised when an operation is performed with an invalid item ID.
+
+    Raised when trying to access or modify an item that doesn't exist.
+    """
 
     pass
 
 
 class ItemsDB:
-    """Database class to access the :file:`items_db` file."""
+    """Database class to access the items_db file.
+
+    Args:
+        db_path (str or pathlib.Path): Path to the database file.
+    """
 
     def __init__(self, db_path):
         self._db_path = db_path
@@ -76,13 +101,13 @@ class ItemsDB:
         """Adds an item to the database.
 
         Args:
-            item (Item): The arguments of the :class:`Item` class.
+            item (Item): The Item instance to add to the database.
 
         Returns:
-            int: The item id.
+            int: The item id of the newly added item.
 
         Raises:
-            MissingSummary: if there is no summary.
+            MissingSummary: If the item has no summary.
         """
         if not item.summary:
             raise MissingSummary
@@ -96,13 +121,13 @@ class ItemsDB:
         """Returns an item for the corresponding id.
 
         Args:
-            item_id: (int): id of the item
+            item_id (int): ID of the item to retrieve.
 
         Returns:
-            Item: Item instance from a dict.
+            Item: Item instance from the database.
 
         Raises:
-            InvalidItemId: if None is returned.
+            InvalidItemId: If no item with the given ID exists.
         """
         db_item = self._db.read(item_id)
         if db_item is not None:
@@ -111,15 +136,15 @@ class ItemsDB:
             raise InvalidItemId(item_id)
 
     def list_items(self, owner=None, state=None):
-        """Returns a list of all items.
+        """Returns a list of items filtered by owner and/or state.
 
         Args:
-            owner: (str): Defaults to None.
-            state: (str): Defaults to None.
+            owner (str, optional): Filter items by this owner. Defaults to None.
+            state (str, optional): Filter items by this state. Defaults to None.
 
         Returns:
-            list: List of all :class:`Item` instances to which ``owner`` and
-            ``state`` apply.
+            list[Item]: List of Item instances matching the filters. If no filters
+            are specified, returns all items.
         """
         all_items = self._db.read_all()
         if (owner is not None) and (state is not None):
@@ -140,10 +165,10 @@ class ItemsDB:
             return [Item.from_dict(t) for t in all_items]
 
     def count(self):
-        """Returns the number of items in the db.
+        """Returns the number of items in the database.
 
         Returns:
-            int: The number of items in the db.
+            int: The number of items in the database.
         """
         return self._db.count()
 
@@ -151,11 +176,11 @@ class ItemsDB:
         """Update an item with modifications.
 
         Args:
-            item_id: (int): The id of the item that is to be updated.
-            item_mods: (Item): The modifications to be made to this item.
+            item_id (int): The ID of the item to update.
+            item_mods (Item): Item instance containing the modifications to apply.
 
         Raises:
-            InvalidItemId: if a KeyError is raised.
+            InvalidItemId: If no item with the given ID exists.
         """
         try:
             self._db.update(item_id, item_mods.to_dict())
@@ -163,28 +188,53 @@ class ItemsDB:
             raise InvalidItemId(item_id) from exc
 
     def start(self, item_id: int):
-        """Sets an item state to in progress."""
+        """Sets an item state to 'in progress'.
+
+        Args:
+            item_id (int): The ID of the item to update.
+
+        Raises:
+            InvalidItemId: If no item with the given ID exists.
+        """
         self.update_item(item_id, Item(state="in progress"))
 
     def finish(self, item_id: int):
-        """Sets an item state to done."""
+        """Sets an item state to 'done'.
+
+        Args:
+            item_id (int): The ID of the item to update.
+
+        Raises:
+            InvalidItemId: If no item with the given ID exists.
+        """
         self.update_item(item_id, Item(state="done"))
 
     def delete_item(self, item_id: int):
-        """Removes an item from db with a given item id."""
+        """Removes an item from the database.
+
+        Args:
+            item_id (int): The ID of the item to delete.
+
+        Raises:
+            InvalidItemId: If no item with the given ID exists.
+        """
         try:
             self._db.delete(item_id)
         except KeyError as exc:
             raise InvalidItemId(item_id) from exc
 
     def delete_all(self):
-        """Removes all items from the db."""
+        """Removes all items from the database."""
         self._db.delete_all()
 
     def close(self):
-        """Closes the db connection."""
+        """Closes the database connection."""
         self._db.close()
 
     def path(self):
-        """Prints the path to the db."""
+        """Returns the path to the database.
+
+        Returns:
+            str or pathlib.Path: Path to the database file.
+        """
         return self._db_path
