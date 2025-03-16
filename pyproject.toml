@@ -21,33 +21,33 @@ classifiers = [
     "Operating System :: OS Independent",
 ]
 dependencies = [
+    "rich",
     "tinydb",
     "typer",
-    "rich",
 ]
 
 [project.optional-dependencies]
 tests = [
     "coverage[toml]",
+    "faker",
     "pytest>=6.0",
     "pytest-cov",
-    "faker",
 ]
 docs = [
+    "interrogate",
     "furo",
-    "sphinxext-opengraph",
     "matplotlib",
     "sphinx-copybutton",
     "sphinx_inline_tabs",
     "sphinxcontrib.napoleon",
-    "interrogate"
+    "sphinxext-opengraph",
 ]
 dev = [
     "items[tests, docs]",
     "pre-commit",
-    "watchgha",
     "reuse",
-    "tox"
+    "tox",
+    "watchgha",
 ]
 
 [project.urls]
