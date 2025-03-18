@@ -32,6 +32,11 @@ repos:
     rev: 25.1.0
     hooks:
     - id: black
+  - repo: https://github.com/tonybaloney/perflint
+    rev: 0.8.1
+    hooks:
+    - id: perflint
+      exclude: docs/conf.py
   - repo: https://github.com/sphinx-contrib/sphinx-lint
     rev: v1.0.0
     hooks:
