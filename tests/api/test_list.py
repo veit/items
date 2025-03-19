@@ -17,14 +17,14 @@ def test_list_no_items(items_db):
 def test_list_several_items(items_db):
     """Given a list of items, this should be returned.
 
-    Given a list of items, the correct number should be returned. In addition,
-    each of the items should be in the list.
+    Given a tuple of items, the correct number should be returned. In addition,
+    each of the items should be in the tuple.
     """
-    orig = [
+    orig = (
         Item("Update pytest section"),
         Item("Update cibuildwheel section", owner="veit"),
         Item("Update mock tests", owner="vsc", state="in progress"),
-    ]
+    )
 
     for c in orig:
         items_db.add_item(c)

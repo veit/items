@@ -85,7 +85,7 @@ jobs:
           if-no-files-found: ignore
 
   coverage:
-    name: Ensure 99% test coverage
+    name: Ensure 100% test coverage
     runs-on: ubuntu-latest
     needs: tests
     if: always()
@@ -110,8 +110,8 @@ jobs:
           python -m coverage html --skip-covered --skip-empty
           # Report and write to summary.
           python -m coverage report --format=markdown >> $GITHUB_STEP_SUMMARY
-          # Report again and fail if under 99%.
-          python -m coverage report --fail-under=99
+          # Report again and fail if under 100%.
+          python -m coverage report --fail-under=100
 
   docs:
     name: Build docs and run doctests
