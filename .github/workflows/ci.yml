@@ -1,4 +1,4 @@
-# SPDX-FileCopyrightText: 2023 Veit Schiele
+# SPDX-FileCopyrightText: 2023–2025 Veit Schiele
 #
 # SPDX-License-Identifier: BSD-3-Clause
 
@@ -51,6 +51,9 @@ jobs:
           - "3.11"
           - "3.12"
           - "3.13"
+          - "3.13t"
+          - "3.14"
+          - "3.14t"
     steps:
       - name: Download pre-built packages
         uses: actions/download-artifact@v4
@@ -60,7 +63,7 @@ jobs:
       - run: |
           tar xf dist/*.tar.gz --strip-components=1
 
-      - name: Setup Python
+      - name: Set up Python ${{ matrix.python-version }}
         uses: actions/setup-python@v5
         with:
           cache: pip
