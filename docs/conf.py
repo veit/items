@@ -43,6 +43,12 @@ extensions = [
     "sphinxext.opengraph",
 ]
 
+# See https://bugs.python.org/issue11975
+nitpick_ignore = [
+    ("py:class", "optional"),
+    ("py:class", "pathlib.Path"),
+]
+
 templates_path = ["_templates"]
 exclude_patterns = ["_build", "Thumbs.db", ".DS_Store"]
 

@@ -7,14 +7,14 @@ API reference
 
 .. automodule:: items.api
 
-:class:`Item` class
--------------------
+:class:`items.api.Item` class
+-----------------------------
 
 .. autoclass:: Item
    :members: from_dict, to_dict
 
-:class:`ItemsDB` class
-----------------------
+:class:`items.api.ItemsDB` class
+--------------------------------
 
 .. autoclass:: ItemsDB
    :members: add_item, get_item, list_items, count, update_item, start, finish,
