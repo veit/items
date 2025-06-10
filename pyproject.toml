@@ -30,6 +30,7 @@ dependencies = [
 tests = [
     "coverage[toml]",
     "faker",
+    "click>=8.2.1",
     "pytest>=6.0",
     "pytest-cov",
 ]
