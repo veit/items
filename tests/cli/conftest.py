@@ -31,7 +31,7 @@ def items_cli_no_redirect():
         """
         command_list = shlex.split(command_string)
         result = runner.invoke(items.cli.app, command_list)
-        output = result.stdout.rstrip()
+        output = result.output.rstrip()
         return output
 
     return run_cli
