@@ -26,7 +26,7 @@ dependencies = [
     "typer",
 ]
 
-[project.optional-dependencies]
+[dependency-groups]
 tests = [
     "coverage[toml]",
     "faker",
@@ -43,7 +43,8 @@ docs = [
     "sphinxext-opengraph",
 ]
 dev = [
-    "items[tests, docs]",
+    { include-group = "tests" },
+    { include-group = "docs" },
     "pre-commit",
     "reuse",
     "tox",
