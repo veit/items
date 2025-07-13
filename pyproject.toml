@@ -47,7 +47,7 @@ dev = [
     { include-group = "docs" },
     "pre-commit",
     "reuse",
-    "tox",
+    "tox-uv>=1.16.0",
     "watchgha",
 ]
 

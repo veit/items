@@ -66,18 +66,15 @@ jobs:
       - name: Set up Python ${{ matrix.python-version }}
         uses: actions/setup-python@v5
         with:
-          cache: pip
           python-version: ${{ matrix.python-version }}
           allow-prereleases: true
-
-      - name: Install tox
-        run: python -m pip install tox
+      - uses: hynek/setup-cached-uv@v2
 
       - name: Run tests for ${{ matrix.python-version }}
-        run: |
-          python -m tox run \
-            --installpkg dist/*.whl \
-            -e py$(echo ${{ matrix.python-version }} | tr -d .)-tests
+        run: >
+          uvx --with tox-uv tox run
+          --installpkg dist/*.whl
+          -e py$(echo ${{ matrix.python-version }} | tr -d .)-tests
 
       - name: Upload coverage data
         uses: actions/upload-artifact@v4
@@ -95,10 +92,12 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
       - uses: actions/setup-python@v5
         with:
-          cache: pip
-          python-version: 3.12
+          python-version-file: .python-version
+      - uses: hynek/setup-cached-uv@v2
 
       - name: Download coverage data
         uses: actions/download-artifact@v4
@@ -106,20 +105,30 @@ jobs:
           pattern: coverage-data-*
           merge-multiple: true
 
-      - name: Combine coverage and fail if it’s <99%.
+      - name: Combine coverage and fail if it’s <100%.
         run: |
-          python -m pip install --upgrade coverage[toml]
-          python -m coverage combine
-          python -m coverage html --skip-covered --skip-empty
+          uv tool install coverage
+
+          coverage combine
+          coverage html --skip-covered --skip-empty
+
           # Report and write to summary.
-          python -m coverage report --format=markdown >> $GITHUB_STEP_SUMMARY
+          coverage report --format=markdown >> $GITHUB_STEP_SUMMARY
+
           # Report again and fail if under 100%.
-          python -m coverage report --fail-under=100
+          coverage report --fail-under=100
+
+      - name: Upload HTML report if check failed.
+        uses: actions/upload-artifact@v4
+        with:
+          name: html-report
+          path: htmlcov
+        if: ${{ failure() }}
 
   docs:
     name: Build docs and run doctests
-    needs: build-package
     runs-on: ubuntu-latest
+    needs: build-package
     steps:
       - name: Download pre-built packages
         uses: actions/download-artifact@v4
@@ -132,6 +141,6 @@ jobs:
         with:
           # Keep in sync with tox.ini/docs & .readthedocs.yaml
           python-version: "3.12"
-          cache: pip
-      - run: python -m pip install tox
-      - run: python -m tox run -e docs
+      - uses: hynek/setup-cached-uv@v2
+
+      - run: uvx --with=tox-uv tox run -e docs
