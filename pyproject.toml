@@ -3,7 +3,7 @@
 # SPDX-License-Identifier: BSD-3-Clause
 
 [build-system]
-requires = ["hatchling"]
+requires = ["hatchling>=1.27"]
 build-backend = "hatchling.build"
 
 [project]
@@ -14,10 +14,11 @@ authors = [
 ]
 description = ""
 readme = "README.rst"
+License-Expression = "BSD-3-Clause"
+License-Files = [ "LICENSES/BSD-3-Clause.txt" ]
 requires-python = ">=3.9"
 classifiers = [
     "Programming Language :: Python :: 3",
-    "License :: OSI Approved :: BSD License",
     "Operating System :: OS Independent",
 ]
 dependencies = [
