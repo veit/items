@@ -10,8 +10,6 @@
 
 import pytest
 
-from items import InvalidItemId, Item
-
 
 @pytest.mark.num_items(5)
 def test_delete_all_from_many(items_db):

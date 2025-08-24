@@ -6,5 +6,13 @@
 
 __version__ = "0.1.0"
 
-from .api import InvalidItemId, Item, ItemsDB
+from .api import InvalidItemIdError, Item, ItemsDB
 from .cli import app
+
+
+__all__ = [
+    "InvalidItemIdError",
+    "Item",
+    "ItemsDB",
+    "app",
+]

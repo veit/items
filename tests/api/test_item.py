@@ -2,7 +2,7 @@
 #
 # SPDX-License-Identifier: BSD-3-Clause
 
-"""Tests for the Item dataclass methods
+"""Tests for the Item dataclass methods.
 
 * Item.from_dict and Item.to_dict methods
 * Item equality comparison
@@ -31,7 +31,10 @@ def test_item_from_dict():
 def test_item_to_dict():
     """Test Item.to_dict method."""
     item = Item(
-        summary="Test summary", owner="Test owner", state="in progress", id=42
+        summary="Test summary",
+        owner="Test owner",
+        state="in progress",
+        id=42,
     )
 
     item_dict = item.to_dict()
@@ -45,13 +48,22 @@ def test_item_to_dict():
 def test_item_equality():
     """Test Item equality comparison."""
     item1 = Item(
-        summary="Same summary", owner="Same owner", state="todo", id=1
+        summary="Same summary",
+        owner="Same owner",
+        state="todo",
+        id=1,
     )
     item2 = Item(
-        summary="Same summary", owner="Same owner", state="todo", id=2
+        summary="Same summary",
+        owner="Same owner",
+        state="todo",
+        id=2,
     )
     item3 = Item(
-        summary="Different summary", owner="Same owner", state="todo", id=1
+        summary="Different summary",
+        owner="Same owner",
+        state="todo",
+        id=1,
     )
 
     # Items with same summary, owner, state but different id should be equal

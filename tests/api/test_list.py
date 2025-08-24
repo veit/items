@@ -36,7 +36,7 @@ def test_list_several_items(items_db):
         assert c in the_list
 
 
-@pytest.fixture()
+@pytest.fixture
 def known_set():
     """Create a list of items.
 
@@ -55,16 +55,16 @@ def known_set():
     ]
 
 
-@pytest.fixture()
+@pytest.fixture
 def db_filled(items_db, known_set):
-    """Filling the database."""
+    """Fill the database."""
     for c in known_set:
         items_db.add_item(c)
     return items_db
 
 
 @pytest.mark.parametrize(
-    "owner_, state_, expected_indices",
+    ("owner_", "state_", "expected_indices"),
     [
         ("", None, (6, 7, 8)),
         ("veit", None, (0, 1, 2)),
@@ -77,8 +77,10 @@ def db_filled(items_db, known_set):
     ids=str,
 )
 def test_list_filter(db_filled, known_set, owner_, state_, expected_indices):
-    """Check the number of items and whether the correct items have been
-    filtered out of the database.
+    """Check the number of items.
+
+    Check additionally whether the correct items have been filtered out of the
+    database.
     """
     result = db_filled.list_items(owner=owner_, state=state_)
     assert len(result) == len(expected_indices)

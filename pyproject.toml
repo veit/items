@@ -60,9 +60,6 @@ Mastodon = "https://mastodon.social/@veit"
 [tool.hatch.version]
 path = "src/items/__init__.py"
 
-[tool.black]
-line-length = 79
-
 [tool.pytest.ini_options]
 addopts = [
     "--strict-markers",
@@ -109,6 +106,37 @@ quiet = false
 whitelist-regex = []
 ignore-regex = []
 color = true
+
+[tool.ruff]
+src = ["src", "tests"]
+line-length = 79
+
+[tool.ruff.lint]
+select = ["ALL"]
+ignore = [
+    "A",       # Shaddowing is fine
+    "ANN",     # We don’t use type annotations
+    "B008",    # Function call `typer.Option` in argument defaults is fine
+    "COM812",  # May cause conflicts when used with the formatter
+    "D203",    # It’s incompatible to D211
+    "D213",    # Ditto
+    "INP001",  # docs/conf.py is a Python file outside of packages
+    "RUF001",  # I love typographic symbols
+    "RUF003",  # Ditto
+    "T201",    # print is fine
+]
+
+[tool.ruff.lint.per-file-ignores]
+"tests/*" = [
+    "ARG001",  # With monkeypatch, seemingly unused arguments are used
+    "S101",    # assert in tests is fine
+    "PLR2004", # Numbers are sometimes fine in tests
+    "W291",    # To test the output on the CLI, trailing spaces are needed
+]
+
+[tool.ruff.lint.isort]
+lines-between-types = 1
+lines-after-imports = 2
 
 [project.scripts]
 items = "items:app"

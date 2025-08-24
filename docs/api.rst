@@ -23,6 +23,6 @@ API reference
 Exceptions
 ----------
 
-.. autoexception:: ItemsException
-.. autoexception:: MissingSummary
-.. autoexception:: InvalidItemId
+.. autoexception:: ItemsError
+.. autoexception:: MissingSummaryError
+.. autoexception:: InvalidItemIdError

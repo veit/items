@@ -11,7 +11,7 @@ def test_config(items_cli, db_path):
 
 
 def test_config_normal_path(db_path, items_cli_no_redirect):
-    """Test whether config does not return the path to the database
+    """Test whether config does not return the path to the database.
 
     If config is called with the ``items_cli_no_redirect`` fixture, the path to
     the productive database should not be returned.

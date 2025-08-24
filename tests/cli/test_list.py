@@ -2,13 +2,14 @@
 #
 # SPDX-License-Identifier: BSD-3-Clause
 
-"""Test the cli list function
+"""Test the cli list function.
 
 * Tests the expected output, even if no parameter was specified.
 * Test the cli list function with owner and state filters.
 """
 
 import items
+
 
 expected_output = """\
 
@@ -20,8 +21,7 @@ expected_output = """\
 
 
 def test_list(items_db, items_cli):
-    """Two items are added and then ``list`` should correspond to
-    ``expected_output`` variable."""
+    """When two items are added, ``list`` should be the ``expected_output``."""
     items_db.add_item(items.Item("Update pytest section"))
     items_db.add_item(items.Item("Update cibuildwheel section"))
     output = items_cli("list")
@@ -29,8 +29,11 @@ def test_list(items_db, items_cli):
 
 
 def test_main(items_db, items_cli):
-    """Even if items is called without options on the command line, the
-    corresponding table should be returned."""
+    """Items without options on the command line should return the table.
+
+    More precisely, even if items is called without options on the command
+    line, the corresponding table should be returned.
+    """
     items_db.add_item(items.Item("Update pytest section"))
     items_db.add_item(items.Item("Update cibuildwheel section"))
     output = items_cli("")
@@ -72,7 +75,7 @@ def test_list_filter_by_owner_and_state(items_db, items_cli):
     """Test filtering the list by both owner and state."""
     items_db.add_item(items.Item("Alice todo", owner="alice", state="todo"))
     in_progress_id = items_db.add_item(
-        items.Item("Alice in progress", owner="alice")
+        items.Item("Alice in progress", owner="alice"),
     )
     items_db.add_item(items.Item("Bob todo", owner="bob", state="todo"))
 

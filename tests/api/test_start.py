@@ -2,22 +2,20 @@
 #
 # SPDX-License-Identifier: BSD-3-Clause
 
-"""
-Test Cases
+"""Test Cases.
+
 * start from "todo", "in progress", and "done" states
 * start an invalid id
 """
 
 import pytest
 
-from items import InvalidItemId, Item
+from items import InvalidItemIdError, Item
 
 
-@pytest.mark.parametrize("start_state", ("todo", "in progress", "done"))
+@pytest.mark.parametrize("start_state", ["todo", "in progress", "done"])
 def test_start(items_db, start_state):
-    """
-    End state should be "in progress"
-    """
+    """End state should be "in progress"."""
     i = Item("Update pytest section", state=start_state)
     ai = items_db.add_item(i)
     items_db.start(ai)
@@ -26,9 +24,7 @@ def test_start(items_db, start_state):
 
 
 def test_start_non_existent(items_db):
-    """
-    Shouldn't be able to start a non-existent item.
-    """
+    """Shouldn't be able to start a non-existent item."""
     i = 42  # any number will do, db is empty
-    with pytest.raises(InvalidItemId):
+    with pytest.raises(InvalidItemIdError):
         items_db.start(i)

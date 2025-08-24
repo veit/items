@@ -2,7 +2,7 @@
 #
 # SPDX-License-Identifier: BSD-3-Clause
 
-"""Testing the api configuration"""
+"""Testing the api configuration."""
 
 
 def test_config(items_db, db_path):

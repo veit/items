@@ -2,7 +2,7 @@
 #
 # SPDX-License-Identifier: BSD-3-Clause
 
-"""Testing the api count function"""
+"""Testing the api count function."""
 
 import pytest
 

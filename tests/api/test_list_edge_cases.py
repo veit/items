@@ -9,9 +9,9 @@ import pytest
 from items import Item
 
 
-@pytest.fixture()
+@pytest.fixture
 def edge_case_db(items_db):
-    """Create database with items having empty strings and special cases"""
+    """Create a database with items having empty strings and special cases."""
     items = (
         Item(summary="Regular task", owner="user", state="todo"),
         Item(summary="Empty owner task", owner="", state="todo"),
@@ -26,7 +26,7 @@ def edge_case_db(items_db):
 
 
 @pytest.mark.parametrize(
-    "owner_filter, state_filter, expected_count",
+    ("owner_filter", "state_filter", "expected_count"),
     [
         ("user", "todo", 2),  # Regular, long summary, special chars
         ("", "todo", 2),  # Empty owner
@@ -39,7 +39,10 @@ def edge_case_db(items_db):
     ],
 )
 def test_list_filter_edge_cases(
-    edge_case_db, owner_filter, state_filter, expected_count
+    edge_case_db,
+    owner_filter,
+    state_filter,
+    expected_count,
 ):
     """Test list filtering with various edge cases."""
     db, _, _ = edge_case_db

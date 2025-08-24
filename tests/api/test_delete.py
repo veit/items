@@ -6,10 +6,10 @@
 
 import pytest
 
-from items import InvalidItemId, Item
+from items import InvalidItemIdError, Item
 
 
-@pytest.fixture()
+@pytest.fixture
 def three_items(items_db):
     """Create three items."""
     item1 = items_db.add_item(Item("Update pytest section"))
@@ -32,7 +32,7 @@ def test_delete_from_many(items_db, three_items):
 
     assert items_db.count() == 2
     # item should not be retrievable after deletion
-    with pytest.raises(InvalidItemId):
+    with pytest.raises(InvalidItemIdError):
         items_db.get_item(id_to_delete)
     # non-deleted items should still be retrievable
     for i in ids_still_there:
@@ -44,17 +44,20 @@ def test_delete_last_item(items_db):
     """Test the deletion of the last added item to an empty database.
 
     The number of items should then be 0. In addition, get_item should throw
-    an InvalidItemId exception.
+    an InvalidItemIdError exception.
     """
     i = items_db.add_item(Item("Update pytest section"))
     items_db.delete_item(i)
     assert items_db.count() == 0
-    with pytest.raises(InvalidItemId):
+    with pytest.raises(InvalidItemIdError):
         items_db.get_item(i)
 
 
 def test_delete_non_existent(items_db):
-    """Deleting a non-existent item should throw the InvalidItemId exception."""
+    """Deleting a non-existent item.
+
+    This should throw the InvalidItemIdError exception.
+    """
     i = 42  # any number will do, db is empty
-    with pytest.raises(InvalidItemId):
+    with pytest.raises(InvalidItemIdError):
         items_db.delete_item(i)

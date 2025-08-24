@@ -12,9 +12,7 @@ import pytest
     ["delete", "update"],
 )
 def test_missing_required_args(command, items_cli):
-    """
-    Commands with missing required arguments should throw an error.
-    """
+    """Commands with missing required arguments should throw an error."""
     out = items_cli(command)
     assert "Missing argument" in out
 
@@ -24,15 +22,16 @@ def test_missing_required_args(command, items_cli):
     ["delete 42", "start 42", "finish 42", "update 42 -s foo -o veit"],
 )
 def test_invalid_item_id(command, items_cli):
-    """If the item with id 42 is deleted, started, finished or updated, the
-    error message "Error: Invalid item id 42" should be output."""
+    """Actions on a non-existent item should throw an error message.
+
+    If the item with id 42 is deleted, started, finished or updated, the error
+    message "Error: Invalid item id 42" should be output.
+    """
     out = items_cli(command)
     assert "Error: Invalid item id 42" in out
 
 
 def test_invalid_command(items_cli):
-    """
-    Using an invalid command should show an error message
-    """
+    """Using an invalid command should show an error message."""
     out = items_cli("nonexistent")
-    assert f"No such command 'nonexistent'." in out
+    assert "No such command 'nonexistent'." in out

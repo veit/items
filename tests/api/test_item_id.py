@@ -2,7 +2,7 @@
 #
 # SPDX-License-Identifier: BSD-3-Clause
 
-"""Test that the item ID is correctly assigned and returned
+"""Test that the item ID is correctly assigned and returned.
 
 * item id is correctly assigned and returned
 * item id is included in the item object when retrieved

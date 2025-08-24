@@ -7,6 +7,7 @@
 import pytest
 
 import items
+
 from items import Item
 
 
@@ -24,9 +25,9 @@ def session_items_db(db_path):
     db_.close()
 
 
-@pytest.fixture(scope="function")
+@pytest.fixture
 def items_db(session_items_db, request, faker):
-    """Returns the database object."""
+    """Return the database object."""
     db = session_items_db
     db.delete_all()
     # support for `@pytest.mark.num_items(<some number>)`
@@ -36,6 +37,6 @@ def items_db(session_items_db, request, faker):
         num_items = m.args[0]
         for _ in range(num_items):
             db.add_item(
-                Item(summary=faker.sentence(), owner=faker.first_name())
+                Item(summary=faker.sentence(), owner=faker.first_name()),
             )
     return db

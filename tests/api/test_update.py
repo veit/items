@@ -2,8 +2,8 @@
 #
 # SPDX-License-Identifier: BSD-3-Clause
 
-"""
-Test Cases
+"""Test Cases.
+
 * `update` the owner of an item
 * `update` the owner of an item to an empty string
 * `update` the summary of a item
@@ -13,14 +13,11 @@ Test Cases
 
 import pytest
 
-from items import InvalidItemId, Item
+from items import InvalidItemIdError, Item
 
 
 def test_update_owner(items_db):
-    """
-    summary and state should stay the same
-    owner should change
-    """
+    """Summary and state should stay the same, only owner should change."""
     i = items_db.add_item(Item("Update pytest section", owner="veit"))
     items_db.update_item(i, Item(owner="vsc", state=None))
 
@@ -29,9 +26,7 @@ def test_update_owner(items_db):
 
 
 def test_update_to_empty_owner(items_db):
-    """
-    Update an owner to an empty string should work
-    """
+    """Update an owner to an empty string should work."""
     i = items_db.add_item(Item(summary="Update pytest section", owner="veit"))
     items_db.update_item(i, Item(owner=""))
     mod = items_db.get_item(i)
@@ -40,45 +35,44 @@ def test_update_to_empty_owner(items_db):
 
 
 def test_update_summary(items_db):
-    """
-    owner and state should stay the same
-    summary should change
-    """
+    """Owner and state should stay the same, summary should change."""
     i = items_db.add_item(
-        Item("Update pytest section", owner="veit", state="done")
+        Item("Update pytest section", owner="veit", state="done"),
     )
     items_db.update_item(
-        i, Item(summary="Update cibuildwheel section", state=None)
+        i,
+        Item(summary="Update cibuildwheel section", state=None),
     )
 
     mod = items_db.get_item(i)
     assert mod == Item(
-        "Update cibuildwheel section", owner="veit", state="done"
+        "Update cibuildwheel section",
+        owner="veit",
+        state="done",
     )
 
 
 def test_update_both(items_db):
-    """
-    state should stay the same
-    owner and summary should change
-    """
+    """State should stay the same, owner and summary should change."""
     i = items_db.add_item(Item("Update pytest section", owner="veit"))
     items_db.update_item(
-        i, Item(summary="Update cibuildwheel section", owner="vsc")
+        i,
+        Item(summary="Update cibuildwheel section", owner="vsc"),
     )
 
     mod = items_db.get_item(i)
     assert mod == Item(
-        "Update cibuildwheel section", owner="vsc", state="todo"
+        "Update cibuildwheel section",
+        owner="vsc",
+        state="todo",
     )
 
 
 def test_update_non_existent(items_db):
-    """
-    Shouldn’t be able to update a non-existent item.
-    """
+    """Shouldn't be able to update a non-existent item."""
     i = 123  # any number will do, db is empty
-    with pytest.raises(InvalidItemId):
+    with pytest.raises(InvalidItemIdError):
         items_db.update_item(
-            i, Item(summary="Update cibuildwheel section", owner="vsc")
+            i,
+            Item(summary="Update cibuildwheel section", owner="vsc"),
         )

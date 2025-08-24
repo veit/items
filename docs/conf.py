@@ -14,6 +14,7 @@ https://www.sphinx-doc.org/en/master/usage/configuration.html#project-informatio
 import os
 import re
 
+
 # Set canonical URL from the Read the Docs Domain
 html_baseurl = os.environ.get("READTHEDOCS_CANONICAL_URL", "")
 
