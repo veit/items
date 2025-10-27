@@ -21,6 +21,14 @@ repos:
       files: \.(yml|yaml|cff)$
     - id: check-added-large-files
     - id: check-toml
+  - repo: https://github.com/tox-dev/pyproject-fmt
+    rev: v2.7.0
+    hooks:
+    - id: pyproject-fmt
+  - repo: https://github.com/abravalheri/validate-pyproject
+    rev: v0.24.1
+    hooks:
+    - id: validate-pyproject
   - repo: https://github.com/astral-sh/ruff-pre-commit
     rev: v0.14.2
     hooks:
