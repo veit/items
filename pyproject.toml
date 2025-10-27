@@ -3,84 +3,115 @@
 # SPDX-License-Identifier: BSD-3-Clause
 
 [build-system]
-requires = ["hatchling>=1.27"]
 build-backend = "hatchling.build"
+requires = [ "hatchling>=1.27" ]
 
 [project]
 name = "items"
-dynamic = ["version"]
-authors = [
-  { name="Veit Schiele", email="veit@cusy.io" },
-]
 description = ""
 readme = "README.rst"
-License-Expression = "BSD-3-Clause"
-License-Files = [ "LICENSES/BSD-3-Clause.txt" ]
+license = "BSD-3-Clause"
+license-files = [ "LICENSES/BSD-3-Clause.txt" ]
+authors = [
+  { name = "Veit Schiele", email = "veit@cusy.io" },
+]
 requires-python = ">=3.9"
 classifiers = [
-    "Programming Language :: Python :: 3",
-    "Operating System :: OS Independent",
+  "Operating System :: OS Independent",
+  "Programming Language :: Python :: 3 :: Only",
+  "Programming Language :: Python :: 3.9",
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
+  "Programming Language :: Python :: 3.13",
 ]
+dynamic = [ "version" ]
 dependencies = [
-    "rich",
-    "tinydb",
-    "typer",
+  "rich",
+  "tinydb",
+  "typer",
 ]
+
+urls.Documentation = "https://items.cusy.io/"
+urls.GitHub = "https://github.com/veit/items"
+urls.Mastodon = "https://mastodon.social/@veit"
+scripts.items = "items:app"
 
 [dependency-groups]
-tests = [
-    "coverage[toml]",
-    "faker",
-    "pytest>=6.0",
-    "pytest-cov",
+dev = [
+  "pre-commit",
+  "reuse",
+  "tox-uv>=1.16",
+  "watchgha",
+  { include-group = "docs" },
+  { include-group = "tests" },
 ]
 docs = [
-    "interrogate",
-    "furo",
-    "matplotlib",
-    "sphinx-copybutton",
-    "sphinx_inline_tabs",
-    "sphinxcontrib.napoleon",
-    "sphinxext-opengraph",
+  "furo",
+  "interrogate",
+  "matplotlib",
+  "sphinx-copybutton",
+  "sphinx-inline-tabs",
+  "sphinxcontrib-napoleon",
+  "sphinxext-opengraph",
 ]
-dev = [
-    { include-group = "tests" },
-    { include-group = "docs" },
-    "pre-commit",
-    "reuse",
-    "tox-uv>=1.16.0",
-    "watchgha",
+tests = [
+  "coverage[toml]",
+  "faker",
+  "pytest>=6",
+  "pytest-cov",
 ]
-
-[project.urls]
-Documentation = "https://items.cusy.io/"
-GitHub = "https://github.com/veit/items"
-Mastodon = "https://mastodon.social/@veit"
 
 [tool.hatch.version]
 path = "src/items/__init__.py"
 
+[tool.ruff]
+line-length = 79
+
+src = [ "src", "tests" ]
+lint.select = [ "ALL" ]
+lint.ignore = [
+  "A",      # Shaddowing is fine
+  "ANN",    # We don’t use type annotations
+  "B008",   # Function call `typer.Option` in argument defaults is fine
+  "COM812", # May cause conflicts when used with the formatter
+  "D203",   # It’s incompatible to D211
+  "D213",   # Ditto
+  "INP001", # docs/conf.py is a Python file outside of packages
+  "RUF001", # I love typographic symbols
+  "RUF003", # Ditto
+  "T201",   # print is fine
+]
+lint.per-file-ignores."tests/*" = [
+  "ARG001",  # With monkeypatch, seemingly unused arguments are used
+  "PLR2004", # Numbers are sometimes fine in tests
+  "S101",    # assert in tests is fine
+  "W291",    # To test the output on the CLI, trailing spaces are needed
+]
+lint.isort.lines-after-imports = 2
+lint.isort.lines-between-types = 1
+
 [tool.pytest.ini_options]
 addopts = [
-    "--strict-markers",
-    "--strict-config",
-    "-ra"
-    ]
+  "--strict-markers",
+  "--strict-config",
+  "-ra",
+]
 testpaths = "tests"
 markers = [
-    "exception: Only run expected exceptions",
-    "finish: Only run finish tests",
-    "smoke: Small subset of all tests",
-    "num_items: Number of items to be pre-filled for the items_db fixture"
-    ]
+  "exception: Only run expected exceptions",
+  "finish: Only run finish tests",
+  "smoke: Small subset of all tests",
+  "num_items: Number of items to be pre-filled for the items_db fixture",
+]
 
 [tool.coverage.run]
 branch = true
 parallel = true
-source = ["items", "tests"]
+source = [ "items", "tests" ]
 
 [tool.coverage.paths]
-source = ["src", ".tox/py*/**/site-packages"]
+source = [ "src", ".tox/py*/**/site-packages" ]
 
 [tool.coverage.report]
 show_missing = true
@@ -99,44 +130,10 @@ ignore-private = false
 ignore-module = false
 ignore-property-decorators = false
 fail-under = 100
-exclude = ["docs"]
+exclude = [ "docs" ]
 verbose = 0
 omit-covered-files = false
 quiet = false
-whitelist-regex = []
-ignore-regex = []
+whitelist-regex = [  ]
+ignore-regex = [  ]
 color = true
-
-[tool.ruff]
-src = ["src", "tests"]
-line-length = 79
-
-[tool.ruff.lint]
-select = ["ALL"]
-ignore = [
-    "A",       # Shaddowing is fine
-    "ANN",     # We don’t use type annotations
-    "B008",    # Function call `typer.Option` in argument defaults is fine
-    "COM812",  # May cause conflicts when used with the formatter
-    "D203",    # It’s incompatible to D211
-    "D213",    # Ditto
-    "INP001",  # docs/conf.py is a Python file outside of packages
-    "RUF001",  # I love typographic symbols
-    "RUF003",  # Ditto
-    "T201",    # print is fine
-]
-
-[tool.ruff.lint.per-file-ignores]
-"tests/*" = [
-    "ARG001",  # With monkeypatch, seemingly unused arguments are used
-    "S101",    # assert in tests is fine
-    "PLR2004", # Numbers are sometimes fine in tests
-    "W291",    # To test the output on the CLI, trailing spaces are needed
-]
-
-[tool.ruff.lint.isort]
-lines-between-types = 1
-lines-after-imports = 2
-
-[project.scripts]
-items = "items:app"
