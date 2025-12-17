@@ -192,3 +192,5 @@ License
 
 This project is licensed under the BSD-3-Clause licence. Further information can
 be found in the ``LICENSE`` file in the project repository.
+
+Dies ist nur ein Beispiel für einen Pull-Request
