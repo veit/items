@@ -30,14 +30,14 @@ repos:
     hooks:
     - id: validate-pyproject
   - repo: https://github.com/astral-sh/ruff-pre-commit
-    rev: v0.14.5
+    rev: v0.14.10
     hooks:
     - id: ruff-check
       args: [--fix, --exit-non-zero-on-fix]
       exclude: docs
     - id: ruff-format
   - repo: https://github.com/sphinx-contrib/sphinx-lint
-    rev: v1.0.1
+    rev: v1.0.2
     hooks:
     - id: sphinx-lint
       args: [--jobs=1]
