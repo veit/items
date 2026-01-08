@@ -14,6 +14,8 @@ https://www.sphinx-doc.org/en/master/usage/configuration.html#project-informatio
 import os
 import re
 
+import items
+
 
 # Set canonical URL from the Read the Docs Domain
 html_baseurl = os.environ.get("READTHEDOCS_CANONICAL_URL", "")
@@ -25,7 +27,7 @@ if os.environ.get("READTHEDOCS", "") == "True":
 
 project = "items"
 author = "Veit Schiele"
-copyright = f"2019–2024, {author}"
+copyright = f"2019–2026, {author}"
 
 # The full version, including alpha/beta/rc tags
 release = re.sub("^v", "", os.popen("git describe --abbrev=0").read().strip())
