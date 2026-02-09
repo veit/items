@@ -31,7 +31,6 @@ dependencies = [
   "tinydb",
   "typer",
 ]
-
 urls.Documentation = "https://items.cusy.io/"
 urls.GitHub = "https://github.com/veit/items"
 urls.Mastodon = "https://mastodon.social/@veit"
@@ -62,12 +61,11 @@ tests = [
   "pytest-cov",
 ]
 
-[tool.hatch.version]
-path = "src/items/__init__.py"
+[tool.hatch]
+version.path = "src/items/__init__.py"
 
 [tool.ruff]
 line-length = 79
-
 src = [ "src", "tests" ]
 lint.select = [ "ALL" ]
 lint.ignore = [
@@ -91,35 +89,31 @@ lint.per-file-ignores."tests/*" = [
 lint.isort.lines-after-imports = 2
 lint.isort.lines-between-types = 1
 
-[tool.pytest.ini_options]
-addopts = [
+[tool.pytest]
+ini_options.addopts = [
   "--strict-markers",
   "--strict-config",
   "-ra",
 ]
-testpaths = "tests"
-markers = [
+ini_options.testpaths = "tests"
+ini_options.markers = [
   "exception: Only run expected exceptions",
   "finish: Only run finish tests",
   "smoke: Small subset of all tests",
   "num_items: Number of items to be pre-filled for the items_db fixture",
 ]
 
-[tool.coverage.run]
-branch = true
-parallel = true
-source = [ "items", "tests" ]
-
-[tool.coverage.paths]
-source = [ "src", ".tox/py*/**/site-packages" ]
-
-[tool.coverage.report]
-show_missing = true
-skip_covered = true
-exclude_lines = [
+[tool.coverage]
+paths.source = [ "src", ".tox/py*/**/site-packages" ]
+report.show_missing = true
+report.skip_covered = true
+report.exclude_lines = [
   "no cov",
   "if __name__ == .__main__.:",
 ]
+run.branch = true
+run.parallel = true
+run.source = [ "items", "tests" ]
 
 [tool.interrogate]
 ignore-init-method = true
@@ -134,6 +128,6 @@ exclude = [ "docs" ]
 verbose = 0
 omit-covered-files = false
 quiet = false
-whitelist-regex = [  ]
-ignore-regex = [  ]
+whitelist-regex = []
+ignore-regex = []
 color = true
