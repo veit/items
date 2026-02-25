@@ -73,7 +73,7 @@ jobs:
         run: >
           uvx --with tox-uv tox run
           --installpkg dist/*.whl
-          -e py$(echo ${{ matrix.python-version }} | tr -d .)-tests
+          -e py$(echo ${{ matrix.python-version }})
 
       - name: Upload coverage data
         uses: actions/upload-artifact@v6
