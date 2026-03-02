@@ -875,7 +875,7 @@ dev = [
     { name = "interrogate" },
     { name = "matplotlib" },
     { name = "pre-commit" },
-    { name = "pytest", specifier = ">=6" },
+    { name = "pytest", specifier = ">=9" },
     { name = "pytest-cov" },
     { name = "reuse" },
     { name = "sphinx-copybutton" },
@@ -897,7 +897,7 @@ docs = [
 tests = [
     { name = "coverage", extras = ["toml"] },
     { name = "faker" },
-    { name = "pytest", specifier = ">=6" },
+    { name = "pytest", specifier = ">=9" },
     { name = "pytest-cov" },
 ]
 

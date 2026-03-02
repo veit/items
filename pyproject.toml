@@ -57,7 +57,7 @@ docs = [
 tests = [
   "coverage[toml]",
   "faker",
-  "pytest>=6",
+  "pytest>=9",
   "pytest-cov",
 ]
 
@@ -90,13 +90,16 @@ lint.isort.lines-after-imports = 2
 lint.isort.lines-between-types = 1
 
 [tool.pytest]
-ini_options.addopts = [
+minversion = "9.0"
+addopts = [
   "--strict-markers",
   "--strict-config",
   "-ra",
 ]
-ini_options.testpaths = "tests"
-ini_options.markers = [
+testpaths = [
+  "tests",
+]
+markers = [
   "exception: Only run expected exceptions",
   "finish: Only run finish tests",
   "smoke: Small subset of all tests",
